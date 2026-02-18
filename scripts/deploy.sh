@@ -10,7 +10,7 @@ TARGET_DIR="${PARENT_DIR}/AiDocPlus"
 DIST_DIR="${REPO_DIR}/dist"
 DATA_DIR="${REPO_DIR}/data"
 
-echo "📦 部署 AiDocPlus-Roles → ${TARGET_DIR}"
+echo "[deploy] AiDocPlus-Roles -> ${TARGET_DIR}"
 
 # 1. 部署 generated TypeScript 文件
 GENERATED_DIR="${TARGET_DIR}/packages/shared-types/src/generated"
@@ -18,9 +18,9 @@ mkdir -p "$GENERATED_DIR"
 
 if [ -f "${DIST_DIR}/roles.generated.ts" ]; then
   cp "${DIST_DIR}/roles.generated.ts" "${GENERATED_DIR}/"
-  echo "   ✅ roles.generated.ts → generated/"
+  echo "   [ok] roles.generated.ts -> generated/"
 else
-  echo "   ⚠️  dist/roles.generated.ts 不存在，请先运行 build.sh"
+  echo "   [warn] dist/roles.generated.ts 不存在，请先运行 build.sh"
 fi
 
 # 2. 部署角色数据到 bundled-resources（供 Rust 后端 + SQLite 索引）
@@ -35,13 +35,13 @@ fi
 # 复制所有角色目录
 find "$DATA_DIR" -name "manifest.json" -not -path "*/_meta.json" | while read -r manifest_file; do
   role_dir="$(dirname "$manifest_file")"
-  role_id=$(python3 -c "import json; print(json.load(open('$manifest_file'))['id'])")
+  role_id=$(grep -o '"id"[[:space:]]*:[[:space:]]*"[^"]*"' "$manifest_file" | head -1 | sed 's/.*"\([^"]*\)"$/\1/')
   
   target_role_dir="${BUNDLED_DIR}/${role_id}"
   mkdir -p "$target_role_dir"
   cp -r "${role_dir}/"* "$target_role_dir/"
-  echo "   📋 ${role_id}"
+  echo "   ${role_id}"
 done
 
-echo "   ✅ 角色数据 → bundled-resources/roles/"
-echo "✅ AiDocPlus-Roles 部署完成"
+echo "   [ok] 角色数据 -> bundled-resources/roles/"
+echo "[done] AiDocPlus-Roles 部署完成"

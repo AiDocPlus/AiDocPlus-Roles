@@ -71,11 +71,11 @@ def generate_role_entry(manifest: dict, system_prompt: str) -> str:
 
 
 def main():
-    print("🔨 构建角色数据...")
+    print("[build] 构建角色数据...")
     roles = find_roles(DATA_DIR)
 
     if not roles:
-        print("⚠️  未找到任何角色数据")
+        print("[warn] 未找到任何角色数据")
         sys.exit(1)
 
     entries = []
@@ -96,7 +96,7 @@ export const BUILT_IN_ROLES: UserRole[] = [
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(output)
 
-    print(f"✅ 角色数据构建完成: {OUTPUT_FILE}")
+    print(f"[done] 角色数据构建完成: {OUTPUT_FILE}")
     print(f"   共 {len(roles)} 个角色")
 
 
