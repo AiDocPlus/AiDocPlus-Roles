@@ -65,10 +65,6 @@ def generate_role_entry(manifest: dict, system_prompt: str) -> str:
         lines.append(f"    suggestedTemperature: {manifest['suggestedTemperature']},")
     if manifest.get("suggestedMaxTokens") is not None:
         lines.append(f"    suggestedMaxTokens: {manifest['suggestedMaxTokens']},")
-    if manifest.get("recommendedTemplateCategories"):
-        lines.append(f"    recommendedTemplateCategories: {ts_string_array(manifest['recommendedTemplateCategories'])},")
-    if manifest.get("recommendedPlugins"):
-        lines.append(f"    recommendedPlugins: {ts_string_array(manifest['recommendedPlugins'])},")
 
     lines.append("  },")
     return "\n".join(lines)
